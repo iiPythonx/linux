@@ -6,13 +6,14 @@ set -euo pipefail
 COMPILE_TARGET=x86_64-iipython-linux-gnu
 
 # General path
-SYSTEM_ROOT="$(realpath build)"
-mkdir -p "$SYSTEM_ROOT"
+BUILDDIR="$(realpath build)"
+mkdir -p "$BUILDDIR"
+
+TOOLDIR="$(realpath build/tools)"
+mkdir -p "$TOOLDIR"
 
 ROOTFS="$(realpath build/rootfs)"
-SOURCES="$(realpath sources)"
-
-mkdir -p "$ROOTFS" "$SOURCES"
+mkdir -p "$ROOTFS"
 
 # Utilities
 package_exists() {
@@ -54,6 +55,22 @@ install_package() {
 
 }
 
-for package in packages/*.sh; do
-    install_package $package
+# Install toolchain
+TOOLCHAIN_PACKAGES=(binutils)
+for package in "${TOOLCHAIN_PACKAGES[@]}"; do
+    python3 tools/lx.py \
+        --root-dir "$ROOTFS" \
+        --prefix "$TOOLDIR" \
+        --temp-dir "$(realpath temp)" \
+        --sources-dir "$(realpath packages)" \
+        $package
 done
+
+# BASE_PACKAGES=(linux-headers m4)
+# for package in "${BASE_PACKAGES[@]}"; do
+#     python3 tools/lx.py \
+#         --root-dir "$ROOTFS" \
+#         --temp-dir "$(realpath temp)" \
+#         --sources-dir "$(realpath packages)" \
+#         $package
+# done
