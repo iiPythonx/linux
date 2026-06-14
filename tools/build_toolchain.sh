@@ -12,8 +12,6 @@ if [ -z "${LX_ENV:-}" ]; then
     SCRIPT="$(realpath $0)"
     exec env -i \
         LX_ENV=1 \
-        HOME="$HOME" \
-        TERM="$TERM" \
         PATH="$ROOTFS/toolchain/bin:$PATH" \
         ROOTFS="$ROOTFS" \
         LC_ALL=POSIX \

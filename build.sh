@@ -16,14 +16,24 @@ done
 mkdir -pv "$ROOTFS/lib64"
 
 # Install base system
-BASE_PACKAGES=(m4 ncurses bash coreutils diffutils file findutils gawk grep gzip make patch sed tar xz binutils gcc)
+BASE_PACKAGES=(
+    m4 ncurses bash coreutils diffutils file findutils
+    gawk grep gzip make patch sed tar xz binutils gcc
+)
+
 for package in "${BASE_PACKAGES[@]}"; do
-    python3 tools/lx.py \
-        --root-dir "$ROOTFS" \
-        --temp-dir "$(realpath temp)" \
-        --sources-dir "$(realpath packages)" \
-        --config-dir "$ROOTFS/var/lx" \
-        $package
+    env -i \
+        ROOTFS="$ROOTFS" \
+        PATH="$ROOTFS/toolchain/bin:/usr/bin:/bin" \
+        LC_ALL=POSIX \
+        CONFIG_SITE="$ROOTFS/usr/share/config.site" \
+        MAKEFLAGS="-j$(nproc)" \
+        python3 tools/lx.py \
+            --root-dir "$ROOTFS" \
+            --temp-dir "$PWD/temp" \
+            --sources-dir "$PWD/packages" \
+            --config-dir "$ROOTFS/var/lx" \
+            "$package"
 done
 
 # Install lx
