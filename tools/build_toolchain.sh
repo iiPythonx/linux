@@ -12,7 +12,7 @@ if [ -z "${LX_ENV:-}" ]; then
     SCRIPT="$(realpath $0)"
     exec env -i \
         LX_ENV=1 \
-        PATH="$ROOTFS/toolchain/bin:$PATH" \
+        PATH="$ROOTFS/toolchain/bin:/usr/bin" \
         ROOTFS="$ROOTFS" \
         LC_ALL=POSIX \
         CONFIG_SITE="$ROOTFS/usr/share/config.site" \
@@ -153,7 +153,7 @@ rm -rf build && mkdir build && cd build
     --disable-multilib         \
     --disable-nls              \
     --disable-libstdcxx-pch    \
-    --with-gxx-include-dir=/tools/$TARGET/include/c++/16.1.0
+    --with-gxx-include-dir=/toolchain/$TARGET/include/c++/16.1.0
 
 make && make DESTDIR=$ROOTFS install
 rm -v $ROOTFS/usr/lib/lib{stdc++{,exp,fs},supc++}.la

@@ -39,7 +39,7 @@ class LX:
 
         # Environment
         self.environment = os.environ | {
-            "LX_TARGET": "x86_64-linux-gnu",
+            "LX_TARGET": "x86_64-iipython-linux-gnu",
             "LX_ROOTFS": str(self.root_dir),
             "LX_PREFIX": str(self.prefix),
             "MAKEFLAGS": f"-j{os.cpu_count()}"

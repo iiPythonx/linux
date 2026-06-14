@@ -10,7 +10,7 @@ build() {
 
 install() {
     make DESTDIR=$LX_ROOTFS install
-    ln -sv bash $LX_ROOTFS/bin/sh
+    ln -sv $LX_ROOTFS/usr/bin/bash $LX_ROOTFS/usr/bin/sh
 }
 
 "$LX_STAGE"

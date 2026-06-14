@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Copyright (c) 2026 iiPython
 
 set -euo pipefail
