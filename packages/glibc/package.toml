@@ -1,0 +1,6 @@
+[package]
+name = "glibc"
+version = "2.43"
+
+[sources]
+glibc = { url = "https://ftp.gnu.org/gnu/glibc/glibc-2.43.tar.xz" }

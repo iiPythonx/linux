@@ -1,0 +1,6 @@
+[package]
+name = "diffutils"
+version = "3.12"
+
+[sources]
+diffutils = { url = "https://ftp.gnu.org/gnu/diffutils/diffutils-3.12.tar.xz" }

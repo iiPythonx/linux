@@ -1,0 +1,6 @@
+[package]
+name = "gawk"
+version = "5.4.0"
+
+[sources]
+gawk = { url = "https://ftp.gnu.org/gnu/gawk/gawk-5.4.0.tar.xz" }

@@ -1,0 +1,6 @@
+[package]
+name = "linux-headers"
+version = "7.0.12"
+
+[sources]
+linux-headers = { url = "https://www.kernel.org/pub/linux/kernel/v7.x/linux-7.0.12.tar.xz" }

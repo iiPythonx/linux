@@ -11,9 +11,6 @@ from dataclasses import dataclass
 from argparse import ArgumentParser, Namespace
 from urllib.request import urlretrieve
 
-class PackageConflict(Exception):
-    pass
-
 @dataclass
 class Source:
     name: str
@@ -21,14 +18,15 @@ class Source:
 
 @dataclass
 class Package:
-    path:    Path
-    name:    str
-    version: str
-    sources: list[Source]
+    path:     Path
+    name:     str
+    version:  str
+    sources:  list[Source]
+    fakeroot: bool
 
 def cexit(message: str) -> None:
     print(message)
-    exit(1)
+    exit()
 
 class LX:
     def __init__(self, args: Namespace) -> None:
@@ -41,9 +39,10 @@ class LX:
 
         # Environment
         self.environment = os.environ | {
-            "LX_TARGET": "x86_64-iipython-linux-gnu",
+            "LX_TARGET": "x86_64-linux-gnu",
             "LX_ROOTFS": str(self.root_dir),
-            "LX_PREFIX": str(self.prefix)
+            "LX_PREFIX": str(self.prefix),
+            "MAKEFLAGS": f"-j{os.cpu_count()}"
         }
 
         # Folder creation
@@ -75,8 +74,10 @@ class LX:
         metadata = tomllib.loads((package_path / "package.toml").read_text())
         return Package(
             path = package_path,
-            **metadata["package"],
-            sources = [Source(name = name, **data) for name, data in metadata["sources"].items()]
+            name = metadata["package"]["name"],
+            version = metadata["package"]["version"],
+            sources = [Source(name = name, **data) for name, data in metadata["sources"].items()],
+            fakeroot = metadata["package"].get("fakeroot", True)
         )
 
     # Package state
@@ -97,7 +98,7 @@ class LX:
     def conflict_check(self, packages: dict[str, dict], package: Package) -> None:
         if package.name in packages:
             found_version = packages[package.name]["version"]
-            raise PackageConflict(f"Package {package.name}-{package.version} can't be installed because {package.name}-{found_version} already exists!")
+            cexit(f"Package {package.name}-{package.version} can't be installed because {package.name}-{found_version} already exists!")
 
     # Operations
     def install(self, package: str | Package) -> None:
@@ -128,40 +129,44 @@ class LX:
 
         # Fakeroot
         fakeroot = self.temp_dir / "fakeroot"
+        if package.fakeroot:
+            if fakeroot.is_dir():
+                rmtree(fakeroot)
+
+        else:
+            fakeroot = self.root_dir
 
         # Handle stages
         def run_stage(stage: str) -> None:
             subprocess.run(
                 ["bash", package.path / "package.sh"],
                 env = self.environment | {"LX_STAGE": stage, "LX_ROOTFS": str(fakeroot)},
-                cwd = self.extract_dir / package.name
+                cwd = self.extract_dir / package.name,
+                check = True
             )
 
         for stage in ("build", "install"):
             run_stage(stage)
 
-        # Register package
-        self.add_package(package, self.scan_fakeroot(fakeroot))
-
         # Relocate
-        for file in fakeroot.rglob("*"):
-            relative = file.relative_to(fakeroot)
-            destination = self.root_dir / relative
+        subprocess.run([
+            "rsync",
+            "-a",
+            f"{fakeroot}/",
+            f"{self.root_dir}/"
+        ], check = True)
 
-            # Movement logic
-            if file.is_symlink():
-                destination.parent.mkdir(parents = True, exist_ok = True)
-                file.readlink().symlink_to(destination)
-
-            elif file.is_dir():
-                destination.mkdir(parents = True, exist_ok = True)
-
-            else:
-                destination.parent.mkdir(parents = True, exist_ok = True)
-                file.copy(destination)
+        # Register package
+        self.add_package(package, self.scan_fakeroot(fakeroot) if package.fakeroot else [])
 
         # Cleanup
-        rmtree(fakeroot)
+        if fakeroot.is_dir() and package.fakeroot:
+            rmtree(fakeroot)
+
+        for source in package.sources:
+            extracted_path = self.extract_dir / source.name
+            if extracted_path.is_dir():
+                rmtree(extracted_path)
 
 if __name__ == "__main__":
     p = ArgumentParser("lx")
