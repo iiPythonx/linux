@@ -1,13 +1,34 @@
 #!/usr/bin/env bash
 # Copyright (c) 2026 iiPython
 
+set -e
 set -euo pipefail
 
+# environment
+ROOTFS="$(realpath rootfs)"
+mkdir -p "$ROOTFS"
+
+if [ -z "${LX_ENV:-}" ]; then
+    SCRIPT="$(realpath $0)"
+    exec env -i \
+        LX_ENV=1 \
+        HOME="$HOME" \
+        TERM="$TERM" \
+        PATH="$ROOTFS/toolchain/bin:$PATH" \
+        ROOTFS="$ROOTFS" \
+        LC_ALL=POSIX \
+        CONFIG_SITE="$ROOTFS/usr/share/config.site" \
+        MAKEFLAGS="-j$(nproc)" \
+        bash --noprofile --norc "$SCRIPT" "$@"
+fi
+
+hash -r
+set +h
+
+# init
 TARGET=x86_64-iipython-linux-gnu
 TEMP="$(realpath temp)"
-ROOTFS="$(realpath rootfs)"
 
-mkdir -p "$ROOTFS"
 mkdir -p "$ROOTFS/toolchain"
 mkdir -p "$TEMP" && cd "$TEMP"
 

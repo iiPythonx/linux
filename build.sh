@@ -16,7 +16,7 @@ done
 mkdir -pv "$ROOTFS/lib64"
 
 # Install base system
-BASE_PACKAGES=(linux-headers glibc m4 ncurses bash coreutils diffutils file findutils gawk grep gzip make patch sed tar xz binutils gcc)
+BASE_PACKAGES=(m4 ncurses bash coreutils diffutils file findutils gawk grep gzip make patch sed tar xz binutils gcc)
 for package in "${BASE_PACKAGES[@]}"; do
     python3 tools/lx.py \
         --root-dir "$ROOTFS" \
