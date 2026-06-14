@@ -2,6 +2,7 @@
 # Copyright (c) 2026 iiPython
 
 import os
+import json
 import tomllib
 import subprocess
 from pathlib import Path
@@ -9,6 +10,9 @@ from shutil import rmtree
 from dataclasses import dataclass
 from argparse import ArgumentParser, Namespace
 from urllib.request import urlretrieve
+
+class PackageConflict(Exception):
+    pass
 
 @dataclass
 class Source:
@@ -28,11 +32,12 @@ def cexit(message: str) -> None:
 
 class LX:
     def __init__(self, args: Namespace) -> None:
-        self.temp_dir = args.temp_dir
-        self.root_dir = args.root_dir
-        self.prefix = args.prefix
-        self.extract_dir = args.temp_dir / "extract"
-        self.sources_dir = args.sources_dir
+        self.temp_dir: Path = args.temp_dir
+        self.root_dir: Path = args.root_dir
+        self.prefix: Path = args.prefix
+        self.extract_dir: Path = args.temp_dir / "extract"
+        self.sources_dir: Path = args.sources_dir
+        self.config_dir: Path = args.config_dir
 
         # Environment
         self.environment = os.environ | {
@@ -42,12 +47,25 @@ class LX:
         }
 
         # Folder creation
-        if not self.extract_dir.is_dir():
-            self.extract_dir.mkdir(parents = True)
+        self.config_dir.mkdir(exist_ok = True, parents = True)
+        self.extract_dir.mkdir(exist_ok = True, parents = True)
+
+        # Grab state file
+        self.state_file = self.config_dir / "package_state.json"
+        if not self.state_file.is_file():
+            self.state_file.write_text("{}")
 
         # Handle packages
         for package in args.packages:
             self.install(package)
+
+    # Utilities
+    @staticmethod
+    def scan_fakeroot(root: Path) -> list[str]:
+        return sorted([
+            "/" + str(item.relative_to(root))
+            for item in root.rglob("*") if not item.is_dir()
+        ])
 
     def read_package(self, package: str) -> Package:
         package_path = self.sources_dir / package
@@ -61,10 +79,35 @@ class LX:
             sources = [Source(name = name, **data) for name, data in metadata["sources"].items()]
         )
 
+    # Package state
+    def read_packages(self) -> dict[str, dict]:
+        return json.loads(self.state_file.read_text())
+
+    def write_packages(self, packages: dict[str, dict]) -> None:
+        self.state_file.write_text(json.dumps(packages, indent = 4))
+
+    def add_package(self, package: Package, filelist: list[str]) -> None:
+        packages = self.read_packages()
+        self.conflict_check(packages, package)
+        self.write_packages(packages | {package.name: {
+            "version": package.version,
+            "files": filelist
+        }})
+
+    def conflict_check(self, packages: dict[str, dict], package: Package) -> None:
+        if package.name in packages:
+            found_version = packages[package.name]["version"]
+            raise PackageConflict(f"Package {package.name}-{package.version} can't be installed because {package.name}-{found_version} already exists!")
+
+    # Operations
     def install(self, package: str | Package) -> None:
         if not isinstance(package, Package):
             package = self.read_package(package)
 
+        packages = self.read_packages()
+        self.conflict_check(packages, package)
+
+        # Download sources
         for source in package.sources:
             filename = source.url.split("/")[-1]
             source_file = self.temp_dir / filename
@@ -97,11 +140,35 @@ class LX:
         for stage in ("build", "install"):
             run_stage(stage)
 
+        # Register package
+        self.add_package(package, self.scan_fakeroot(fakeroot))
+
+        # Relocate
+        for file in fakeroot.rglob("*"):
+            relative = file.relative_to(fakeroot)
+            destination = self.root_dir / relative
+
+            # Movement logic
+            if file.is_symlink():
+                destination.parent.mkdir(parents = True, exist_ok = True)
+                file.readlink().symlink_to(destination)
+
+            elif file.is_dir():
+                destination.mkdir(parents = True, exist_ok = True)
+
+            else:
+                destination.parent.mkdir(parents = True, exist_ok = True)
+                file.copy(destination)
+
+        # Cleanup
+        rmtree(fakeroot)
+
 if __name__ == "__main__":
     p = ArgumentParser("lx")
     p.add_argument("--root-dir", type = Path, help = "targeted root filesystem", default = "/")
     p.add_argument("--prefix", type = Path, help = "installation prefix for configure stage", default = "/")
     p.add_argument("--temp-dir", type = Path, help = "extraction directory for package sources", default = "/tmp/lx")
+    p.add_argument("--config-dir", type = Path, help = "path to lx configuration data", default = "/var/lx")
     p.add_argument("--sources-dir", type = Path, help = "directory to use as a source cache", default = "/var/cache/lx/sources")
     p.add_argument("packages", nargs = "+")
 

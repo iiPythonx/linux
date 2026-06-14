@@ -2,14 +2,14 @@
 
 build() {
     ./configure --prefix=/usr \
-        --host=$ROOTFS        \
+        --host=$LX_TARGET     \
         --build=$(build-aux/config.guess)
 
     make
 }
 
 install() {
-    make DESTDIR=$ROOTFS install
+    make DESTDIR=$LX_ROOTFS install
 }
 
 "$LX_STAGE"

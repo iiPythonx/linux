@@ -1,7 +1,6 @@
 [package]
 name = "m4"
-version = "1.4.20"
-depends = [ "glibc" ]
+version = "1.4.21"
 
 [sources]
-m4 = { url = "https://ftp.gnu.org/gnu/m4/m4-1.4.20.tar.xz" }
+m4 = { url = "https://ftp.gnu.org/gnu/m4/m4-1.4.21.tar.xz" }
