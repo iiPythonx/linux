@@ -23,6 +23,16 @@ fi
 hash -r
 set +h
 
+# structure
+mkdir -pv "$ROOTFS"/{etc,var}
+mkdir -pv "$ROOTFS"/usr/{bin,lib,sbin}
+
+for i in bin lib sbin; do
+    ln -snfv "usr/$i" "$ROOTFS/$i"
+done
+
+mkdir -pv "$ROOTFS/lib64"
+
 # init
 TARGET=x86_64-iipython-linux-gnu
 TEMP="$(realpath temp)"
@@ -107,10 +117,14 @@ cd $TEMP
 
 # glibc
 curl -O https://ftp.gnu.org/gnu/glibc/glibc-2.43.tar.xz
+curl -O https://www.linuxfromscratch.org/patches/lfs/development/glibc-2.43-upstream_fixes-1.patch
+
 tar -xf glibc-2.43.tar.xz && cd glibc-2.43
 
 ln -sfv $ROOTFS/lib/ld-linux-x86-64.so.2 $ROOTFS/lib64
 ln -sfv $ROOTFS/lib/ld-linux-x86-64.so.2 $ROOTFS/lib64/ld-lsb-x86-64.so.3
+
+patch -Np1 -i ../glibc-2.43-upstream_fixes-1.patch
 
 mkdir build && cd build
 
@@ -122,7 +136,7 @@ mkdir build && cd build
       libc_cv_slibdir=/usr/lib           \
       --enable-kernel=5.4
 
-make && make DESTDIR=$ROOTFS install
+make -j1 && make DESTDIR=$ROOTFS install
 
 sed '/RTLDLIST=/s@/usr@@g' -i $ROOTFS/usr/bin/ldd
 
