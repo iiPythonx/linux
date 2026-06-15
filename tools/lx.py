@@ -133,10 +133,10 @@ class LX:
             if fakeroot.is_dir():
                 rmtree(fakeroot)
 
+            fakeroot.mkdir()
+
         else:
             fakeroot = self.root_dir
-
-        fakeroot.mkdir()
 
         # Handle stages
         def run_stage(stage: str) -> None:
