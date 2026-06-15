@@ -76,8 +76,8 @@ class LX:
             path = package_path,
             name = metadata["package"]["name"],
             version = metadata["package"]["version"],
-            sources = [Source(name = name, **data) for name, data in metadata["sources"].items()],
-            fakeroot = metadata["package"].get("fakeroot", True)
+            sources = [Source(name = name, **data) for name, data in metadata.get("sources", {}).items()],
+            fakeroot = metadata.get("build", {}).get("fakeroot", True)
         )
 
     # Package state
@@ -136,12 +136,18 @@ class LX:
         else:
             fakeroot = self.root_dir
 
+        fakeroot.mkdir()
+
         # Handle stages
         def run_stage(stage: str) -> None:
+            active_path = self.extract_dir / package.name
+            if not active_path.is_dir():
+                active_path = fakeroot  # No sources were extracted, metapackage or smth similar
+
             subprocess.run(
                 ["bash", package.path / "package.sh"],
                 env = self.environment | {"LX_STAGE": stage, "LX_ROOTFS": str(fakeroot)},
-                cwd = self.extract_dir / package.name,
+                cwd = active_path,
                 check = True
             )
 

@@ -24,14 +24,12 @@ hash -r
 set +h
 
 # structure
-mkdir -pv "$ROOTFS"/{etc,var}
-mkdir -pv "$ROOTFS"/usr/{bin,lib,sbin}
-
-for i in bin lib sbin; do
-    ln -snfv "usr/$i" "$ROOTFS/$i"
-done
-
-mkdir -pv "$ROOTFS/lib64"
+python3 tools/lx.py \
+    --root-dir "$ROOTFS" \
+    --temp-dir "$PWD/temp" \
+    --sources-dir "$PWD/packages" \
+    --config-dir "$ROOTFS/var/lx" \
+    iipython-filesystem
 
 # init
 TARGET=x86_64-iipython-linux-gnu
@@ -43,6 +41,8 @@ mkdir -p "$TEMP" && cd "$TEMP"
 # binutils
 curl -O https://sourceware.org/pub/binutils/releases/binutils-2.46.1.tar.xz
 tar -xf binutils-2.46.1.tar.xz && cd binutils-2.46.1
+
+rm -rf build
 mkdir build && cd build
 
 ../configure --prefix=$ROOTFS/toolchain      \
@@ -72,6 +72,8 @@ tar -xf ../mpc-1.4.1.tar.xz
 mv -v mpc-1.4.1 mpc
 
 sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
+
+rm -rf build
 mkdir build && cd build
 
 ../configure                     \
@@ -126,6 +128,7 @@ ln -sfv ../lib/ld-linux-x86-64.so.2 $ROOTFS/lib64/ld-lsb-x86-64.so.3
 
 patch -Np1 -i ../glibc-2.43-upstream_fixes-1.patch
 
+rm -rf build
 mkdir build && cd build
 
 ../configure                             \
