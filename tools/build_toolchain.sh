@@ -121,8 +121,8 @@ curl -O https://www.linuxfromscratch.org/patches/lfs/development/glibc-2.43-upst
 
 tar -xf glibc-2.43.tar.xz && cd glibc-2.43
 
-ln -sfv $ROOTFS/lib/ld-linux-x86-64.so.2 $ROOTFS/lib64
-ln -sfv $ROOTFS/lib/ld-linux-x86-64.so.2 $ROOTFS/lib64/ld-lsb-x86-64.so.3
+ln -sfv ../lib/ld-linux-x86-64.so.2 $ROOTFS/lib64
+ln -sfv ../lib/ld-linux-x86-64.so.2 $ROOTFS/lib64/ld-lsb-x86-64.so.3
 
 patch -Np1 -i ../glibc-2.43-upstream_fixes-1.patch
 
