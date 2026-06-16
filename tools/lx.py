@@ -55,10 +55,28 @@ class LX:
             self.state_file.write_text("{}")
 
         # Handle packages
+        package_list = []
         for package in args.packages:
+            if package[0] == "@":
+                package_list += self.resolve_group(package[1:])
+
+            else:
+                package_list.append(package)
+
+        for package in package_list:
             self.install(package)
 
     # Utilities
+    def resolve_group(self, group: str) -> list[str]:
+        group_file = self.sources_dir / f"{group}.list"
+        if not group_file.is_file():
+            cexit(f"Group not found: {group}")
+
+        return [
+            package for package in group_file.read_text().splitlines()
+            if package.strip()
+        ]
+
     @staticmethod
     def scan_fakeroot(root: Path) -> list[str]:
         return sorted([
@@ -95,10 +113,13 @@ class LX:
             "files": filelist
         }})
 
-    def conflict_check(self, packages: dict[str, dict], package: Package) -> None:
+    def conflict_check(self, packages: dict[str, dict], package: Package) -> bool:
         if package.name in packages:
             found_version = packages[package.name]["version"]
-            cexit(f"Package {package.name}-{package.version} can't be installed because {package.name}-{found_version} already exists!")
+            print(f"Package {package.name}-{package.version} can't be installed because {package.name}-{found_version} already exists!")
+            return False
+
+        return True
 
     # Operations
     def install(self, package: str | Package) -> None:
@@ -106,7 +127,8 @@ class LX:
             package = self.read_package(package)
 
         packages = self.read_packages()
-        self.conflict_check(packages, package)
+        if not self.conflict_check(packages, package):
+            return
 
         # Download sources
         for source in package.sources:

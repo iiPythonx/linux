@@ -1,0 +1,6 @@
+[package]
+name = "texinfo-bootstrap"
+version = "7.3"
+
+[sources]
+texinfo-bootstrap = { url = "https://ftp.gnu.org/gnu/texinfo/texinfo-7.3.tar.xz" }

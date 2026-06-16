@@ -1,0 +1,6 @@
+[package]
+name = "util-linux-bootstrap"
+version = "2.42.2"
+
+[sources]
+util-linux-bootstrap = { url = "https://www.kernel.org/pub/linux/utils/util-linux/v2.42/util-linux-2.42.2.tar.xz" }
