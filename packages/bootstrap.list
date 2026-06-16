@@ -4,3 +4,4 @@ perl-bootstrap
 python3-bootstrap
 texinfo-bootstrap
 util-linux-bootstrap
+zlib

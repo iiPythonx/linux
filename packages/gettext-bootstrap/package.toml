@@ -1,6 +1,7 @@
 [package]
 name = "gettext-bootstrap"
 version = "1.0"
+extras = [ "bootstrap" ]
 
 [sources]
 gettext-bootstrap  = { url = "https://ftp.gnu.org/gnu/gettext/gettext-1.0.tar.xz" }

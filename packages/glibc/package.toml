@@ -1,6 +1,19 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/glibc.html
+
 [package]
 name = "glibc"
 version = "2.43"
 
 [sources]
-glibc = { url = "https://ftp.gnu.org/gnu/glibc/glibc-2.43.tar.xz" }
+
+[sources.glibc]
+url = "https://ftp.gnu.org/gnu/glibc/glibc-2.43.tar.xz"
+type = "archive"
+
+[sources.tzdata]
+url = "https://www.iana.org/time-zones/repository/releases/tzdata2025b.tar.gz"
+type = "archive"
+
+[sources.glibc-patch]
+url = "https://www.linuxfromscratch.org/patches/lfs/development/glibc-2.43-upstream_fixes-1.patch"
+type = "file"

@@ -13,8 +13,12 @@ from urllib.request import urlretrieve
 
 @dataclass
 class Source:
-    name: str
-    url:  str
+    name:  str
+    url:   str
+    strip: int
+
+    def __init__(self, name: str, url: str, strip: int = 1) -> None:
+        self.name, self.url, self.strip = name, url, strip
 
 @dataclass
 class Package:
@@ -36,6 +40,9 @@ class LX:
         self.extract_dir: Path = args.temp_dir / "extract"
         self.sources_dir: Path = args.sources_dir
         self.config_dir: Path = args.config_dir
+
+        # Handle fetch mode
+        self.fetch: bool = args.fetch
 
         # Environment
         self.environment = os.environ | {
@@ -142,12 +149,24 @@ class LX:
             else:
                 print(f"Reusing source '{source.name}' for package '{package.name}'")
 
+            if self.fetch:
+                continue
+
             extracted_path = self.extract_dir / source.name
             if extracted_path.is_dir():
                 rmtree(extracted_path)
 
             extracted_path.mkdir()
-            subprocess.run(["tar", "-xf", source_file, "--strip-components=1", "-C", self.extract_dir / source.name])
+            if filename.endswith(".tar.xz") or filename.endswith(".tar.gz"):
+                subprocess.run(["tar", "-xf", source_file, f"--strip-components={source.strip}", "-C", self.extract_dir / source.name])
+
+            else:
+
+                # Copy file as-is
+                source_file.rename(extracted_path / source_file.name)
+
+        if self.fetch:
+            return
 
         # Fakeroot
         fakeroot = self.temp_dir / "fakeroot"
@@ -177,12 +196,13 @@ class LX:
             run_stage(stage)
 
         # Relocate
-        subprocess.run([
-            "rsync",
-            "-a",
-            f"{fakeroot}/",
-            f"{self.root_dir}/"
-        ], check = True)
+        if package.fakeroot:
+            subprocess.run([
+                "rsync",
+                "-a",
+                f"{fakeroot}/",
+                f"{self.root_dir}/"
+            ], check = True)
 
         # Register package
         self.add_package(package, self.scan_fakeroot(fakeroot) if package.fakeroot else [])
@@ -203,6 +223,7 @@ if __name__ == "__main__":
     p.add_argument("--temp-dir", type = Path, help = "extraction directory for package sources", default = "/tmp/lx")
     p.add_argument("--config-dir", type = Path, help = "path to lx configuration data", default = "/var/lx")
     p.add_argument("--sources-dir", type = Path, help = "directory to use as a source cache", default = "/var/cache/lx/sources")
+    p.add_argument("--fetch", action = "store_true", help = "only fetch sources, don't install anything", default = False)
     p.add_argument("packages", nargs = "+")
 
     LX(p.parse_args())
