@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/make.html
+
 [package]
 name = "make"
 version = "4.4.1"
 
 [sources]
-make = { url = "https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz" }
+
+[sources.make]
+url = "https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz"

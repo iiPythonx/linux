@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 
 build() {
-    ./configure --prefix=/usr                      \
-                --build=$(sh support/config.guess) \
-                --host=$LX_TARGET                  \
-                --without-bash-malloc
+    ./configure --prefix=/usr             \
+                --without-bash-malloc     \
+                --with-installed-readline \
+                --docdir=/usr/share/doc/bash-5.3
     make
 }
 
-install() {
+package() {
     make DESTDIR=$LX_ROOTFS install
-    ln -sv bash $LX_ROOTFS/usr/bin/sh
 }
-
-"$LX_STAGE"

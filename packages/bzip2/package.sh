@@ -8,7 +8,7 @@ build() {
     make
 }
 
-install() {
+package() {
     make PREFIX=/usr install
     cp -av libbz2.so.* /usr/lib
     ln -sfv libbz2.so.1.0.8 /usr/lib/libbz2.so
@@ -19,5 +19,3 @@ install() {
     done
     rm -fv /usr/lib/libbz2.a
 }
-
-"$LX_STAGE"

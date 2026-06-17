@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 build() {
+    patch -Np1 -i ../python-patch/Python-3.14.6-openssl_4-1.patch
+
     ./configure --prefix=/usr          \
                 --enable-shared        \
                 --with-system-expat    \
@@ -9,8 +11,6 @@ build() {
     make
 }
 
-install() {
-    make install
+package() {
+    make DESTDIR=$LX_ROOTFS install
 }
-
-"$LX_STAGE"

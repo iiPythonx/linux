@@ -7,10 +7,8 @@ build() {
     make
 }
 
-install() {
-    make install
+package() {
+    make DESTDIR=$LX_ROOTFS install
     ln -sv pkgconf   /usr/bin/pkg-config
     ln -sv pkgconf.1 /usr/share/man/man1/pkg-config.1
 }
-
-"$LX_STAGE"

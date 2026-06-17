@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/gzip.html
+
 [package]
 name = "gzip"
 version = "1.14"
 
 [sources]
-gzip = { url = "https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz" }
+
+[sources.gzip]
+url = "https://ftpmirror.gnu.org/gzip/gzip-1.14.tar.xz"

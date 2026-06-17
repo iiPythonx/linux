@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/texinfo.html
+
+[package]
+name = "texinfo"
+version = "7.3"
+
+[sources]
+
+[sources.texinfo]
+url = "https://ftpmirror.gnu.org/texinfo/texinfo-7.3.tar.xz"

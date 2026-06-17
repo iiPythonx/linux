@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/ninja.html
+
+[package]
+name = "ninja"
+version = "1.13.2"
+
+[sources]
+
+[sources.ninja]
+url = "https://github.com/ninja-build/ninja/archive/v1.13.2/ninja-1.13.2.tar.gz"

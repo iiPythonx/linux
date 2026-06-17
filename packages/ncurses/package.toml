@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/ncurses.html
+
 [package]
 name = "ncurses"
 version = "6.6-20260608"
 
 [sources]
-ncurses = { url = "https://invisible-mirror.net/archives/ncurses/current/ncurses-6.6-20260608.tgz" }
+
+[sources.ncurses]
+url = "https://invisible-mirror.net/archives/ncurses/current/ncurses-6.6-20260608.tgz"

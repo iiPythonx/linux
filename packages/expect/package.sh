@@ -12,9 +12,7 @@ build() {
     make
 }
 
-install() {
-    make install
+package() {
+    make DESTDIR=$LX_ROOTFS install
     ln -svf expect5.45.4/libexpect5.45.4.so /usr/lib
 }
-
-"$LX_STAGE"

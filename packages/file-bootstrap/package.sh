@@ -14,9 +14,7 @@ build() {
 
 }
 
-install() {
+package() {
     make DESTDIR=$LX_ROOTFS install
     rm -v $LX_ROOTFS/usr/lib/libmagic.la
 }
-
-"$LX_STAGE"

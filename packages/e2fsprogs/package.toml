@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/e2fsprogs.html
+
+[package]
+name = "e2fsprogs"
+version = "1.47.4"
+
+[sources]
+
+[sources.e2fsprogs]
+url = "https://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v1.47.4/e2fsprogs-1.47.4.tar.gz"

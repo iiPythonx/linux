@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/sqlite.html
+
+[package]
+name = "sqlite"
+version = "3530200"
+
+[sources]
+
+[sources.sqlite]
+url = "https://sqlite.org/2026/sqlite-autoconf-3530200.tar.gz"

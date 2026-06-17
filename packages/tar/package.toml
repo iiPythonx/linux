@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/tar.html
+
 [package]
 name = "tar"
 version = "1.35"
 
 [sources]
-tar = { url = "https://ftp.gnu.org/gnu/tar/tar-1.35.tar.xz" }
+
+[sources.tar]
+url = "https://ftpmirror.gnu.org/tar/tar-1.35.tar.xz"

@@ -4,8 +4,6 @@ build() {
     return 0
 }
 
-install() {
+package() {
     cp services protocols /etc
 }
-
-"$LX_STAGE"

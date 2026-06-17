@@ -1,6 +1,3 @@
 [package]
 name = "iipython-filesystem"
 version = "1.0.0"
-
-[build]
-fakeroot = false

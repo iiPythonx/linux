@@ -1,6 +1,13 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/Python.html
+
 [package]
 name = "python3"
 version = "3.14.6"
 
 [sources]
-python3 = { url = "https://www.python.org/ftp/python/3.14.6/Python-3.14.6.tar.xz" }
+
+[sources.python3]
+url = "https://www.python.org/ftp/python/3.14.6/Python-3.14.6.tar.xz"
+
+[sources.python-patch]
+url = "https://www.linuxfromscratch.org/patches/lfs/development/Python-3.14.6-openssl_4-1.patch"

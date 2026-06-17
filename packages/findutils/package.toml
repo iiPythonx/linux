@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/findutils.html
+
 [package]
 name = "findutils"
 version = "4.10.0"
 
 [sources]
-findutils = { url = "https://ftp.gnu.org/gnu/findutils/findutils-4.10.0.tar.xz" }
+
+[sources.findutils]
+url = "https://ftpmirror.gnu.org/findutils/findutils-4.10.0.tar.xz"

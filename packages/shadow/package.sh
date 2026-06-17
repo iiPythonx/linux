@@ -20,7 +20,7 @@ build() {
     make
 }
 
-install() {
+package() {
     make exec_prefix=/usr install
     make -C man install-man
 
@@ -33,5 +33,3 @@ install() {
 
     passwd root
 }
-
-"$LX_STAGE"

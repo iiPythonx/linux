@@ -4,8 +4,6 @@ build() {
     make BUILD_STATIC=no PREFIX=/usr
 }
 
-install() {
+package() {
     make BUILD_STATIC=no PREFIX=/usr install
 }
-
-"$LX_STAGE"

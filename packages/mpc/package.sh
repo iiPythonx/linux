@@ -8,9 +8,7 @@ build() {
     make html
 }
 
-install() {
-    make install
-    make install-html
+package() {
+    make DESTDIR=$LX_ROOTFS install
+    make DESTDIR=$LX_ROOTFS install-html
 }
-
-"$LX_STAGE"

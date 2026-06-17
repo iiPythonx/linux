@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/util-linux.html
+
+[package]
+name = "util-linux"
+version = "9.11"
+
+[sources]
+
+[sources.util-linux]
+url = "https://www.kernel.org/pub/linux/utils/util-linux/v2.42/util-linux-2.42.1.tar.xz"

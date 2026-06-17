@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/openssl.html
+
+[package]
+name = "openssl"
+version = "4.0.1"
+
+[sources]
+
+[sources.openssl]
+url = "https://github.com/openssl/openssl/releases/download/openssl-4.0.1/openssl-4.0.1.tar.gz"

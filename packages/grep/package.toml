@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/grep.html
+
 [package]
 name = "grep"
 version = "3.12"
 
 [sources]
-grep = { url = "https://ftp.gnu.org/gnu/grep/grep-3.12.tar.xz" }
+
+[sources.grep]
+url = "https://ftp.gnu.org/gnu/grep/grep-3.12.tar.xz"

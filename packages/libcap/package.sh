@@ -5,8 +5,6 @@ build() {
     make prefix=/usr lib=lib
 }
 
-install() {
+package() {
     make prefix=/usr lib=lib install
 }
-
-"$LX_STAGE"

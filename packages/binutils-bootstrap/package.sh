@@ -17,10 +17,8 @@ build() {
     make
 }
 
-install() {
+package() {
     cd build
     make DESTDIR=$LX_ROOTFS install
     rm -v $LX_ROOTFS/usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes,sframe}.{a,la}
 }
-
-"$LX_STAGE"

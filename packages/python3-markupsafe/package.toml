@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/markupsafe.html
+
+[package]
+name = "python3-markupsafe"
+version = "3.0.3"
+
+[sources]
+
+[sources.python3-markupsafe]
+url = "https://pypi.org/packages/source/M/MarkupSafe/markupsafe-3.0.3.tar.gz"

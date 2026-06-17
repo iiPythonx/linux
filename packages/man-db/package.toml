@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/man-db.html
+
+[package]
+name = "man-db"
+version = "2.13.1"
+
+[sources]
+
+[sources.man-db]
+url = "https://download.savannah.gnu.org/releases/man-db/man-db-2.13.1.tar.xz"

@@ -30,10 +30,8 @@ build() {
     make
 }
 
-install() {
+package() {
     cd build
     make DESTDIR=$LX_ROOTFS install
     ln -sv gcc $LX_ROOTFS/usr/bin/cc
 }
-
-"$LX_STAGE"

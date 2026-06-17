@@ -2,14 +2,12 @@
 
 build() {
     sed -i 's/extras//' Makefile.in
-    ./configure --prefix=/usr     \
-                --host=$LX_TARGET \
-                --build=$(build-aux/config.guess)
+    ./configure --prefix=/usr
     make
 }
 
-install() {
-    make DESTDIR=$LX_ROOTFS install
+package() {
+    rm -f /usr/bin/gawk-5.4.0
+    make install
+    ln -sv gawk.1 /usr/share/man/man1/awk.1
 }
-
-"$LX_STAGE"

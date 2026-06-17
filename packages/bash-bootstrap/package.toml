@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter06/bash.html
+
+[package]
+name = "bash-bootstrap"
+version = "5.3"
+
+[sources]
+
+[sources.bash-bootstrap]
+url = "https://ftp.gnu.org/gnu/bash/bash-5.3.tar.gz"

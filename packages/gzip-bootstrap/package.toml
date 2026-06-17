@@ -1,0 +1,6 @@
+[package]
+name = "gzip-bootstrap"
+version = "1.14"
+
+[sources]
+gzip-bootstrap = { url = "https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz" }

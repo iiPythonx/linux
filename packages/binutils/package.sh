@@ -16,10 +16,8 @@ build() {
     make -k check || true
 }
 
-install() {
+package() {
     cd build
     make tooldir=/usr install
     rm -rfv /usr/lib/lib{bfd,ctf,ctf-nobfd,gprofng,opcodes,sframe}.a /usr/share/doc/gprofng/
 }
-
-"$LX_STAGE"

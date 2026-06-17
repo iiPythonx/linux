@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 
 build() {
-    ./configure --prefix=/usr --host=$LX_TARGET
+    ./configure --prefix=/usr
     make
 }
 
-install() {
+package() {
     make DESTDIR=$LX_ROOTFS install
 }
-
-"$LX_STAGE"

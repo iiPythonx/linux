@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/libpipeline.html
+
+[package]
+name = "libpipeline"
+version = "1.5.8"
+
+[sources]
+
+[sources.libpipeline]
+url = "https://download.savannah.gnu.org/releases/libpipeline/libpipeline-1.5.8.tar.gz"

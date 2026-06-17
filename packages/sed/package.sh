@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
 build() {
-    ./configure --prefix=/usr     \
-                --host=$LX_TARGET \
-                --build=$(./build-aux/config.guess)
+    ./configure --prefix=/usr
     make
+    make html
 }
 
-install() {
+package() {
     make DESTDIR=$LX_ROOTFS install
+    install -vDm644 doc/sed.html -t /usr/share/doc/sed-4.10
 }
-
-"$LX_STAGE"

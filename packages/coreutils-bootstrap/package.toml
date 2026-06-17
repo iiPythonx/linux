@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter06/coreutils.html
+
+[package]
+name = "coreutils"
+version = "9.11"
+
+[sources]
+
+[sources.coreutils-bootstrap]
+url = "https://ftp.gnu.org/gnu/coreutils/coreutils-9.11.tar.xz"

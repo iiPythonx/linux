@@ -24,11 +24,11 @@ build() {
     make check || true
 }
 
-install() {
+package() {
     touch /etc/ld.so.conf
     sed '/test-installation/s@$(PERL)@echo not running@' -i Makefile
 
-    cd build && make install
+    cd build && make DESTDIR=$LX_ROOTFS install
 
     sed '/RTLDLIST=/s@/usr@@g' -i /usr/bin/ldd
 
@@ -109,5 +109,3 @@ EOF
 
 EOF
 }
-
-"$LX_STAGE"

@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/kmod.html
+
+[package]
+name = "kmod"
+version = "34.2"
+
+[sources]
+
+[sources.kmod]
+url = "https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-34.2.tar.xz"

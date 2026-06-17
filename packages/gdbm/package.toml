@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/gdbm.html
+
+[package]
+name = "gdbm"
+version = "1.26"
+
+[sources]
+
+[sources.gdbm]
+url = "https://ftpmirror.gnu.org/gdbm/gdbm-1.26.tar.gz"

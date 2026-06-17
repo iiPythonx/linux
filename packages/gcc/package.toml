@@ -4,9 +4,6 @@
 name = "gcc"
 version = "16.1.0"
 
-[build]
-fakeroot = false
-
 [sources]
 
 [sources.gcc]

@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/gawk.html
+
 [package]
 name = "gawk"
 version = "5.4.0"
 
 [sources]
-gawk = { url = "https://ftp.gnu.org/gnu/gawk/gawk-5.4.0.tar.xz" }
+
+[sources.gawk]
+url = "https://ftpmirror.gnu.org/gawk/gawk-5.4.0.tar.xz"

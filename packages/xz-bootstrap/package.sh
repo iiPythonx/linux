@@ -9,9 +9,7 @@ build() {
     make
 }
 
-install() {
+package() {
     make DESTDIR=$LX_ROOTFS install
     rm -v $LX_ROOTFS/usr/lib/liblzma.la
 }
-
-"$LX_STAGE"

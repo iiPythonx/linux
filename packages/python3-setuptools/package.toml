@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/setuptools.html
+
+[package]
+name = "python3-setuptools"
+version = "82.0.1"
+
+[sources]
+
+[sources.python3-setuptools]
+url = "https://pypi.org/packages/source/s/setuptools/setuptools-82.0.1.tar.gz"

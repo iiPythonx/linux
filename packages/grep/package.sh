@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
 
 build() {
-    ./configure --prefix=/usr     \
-                --host=$LX_TARGET \
-                --build=$(./build-aux/config.guess)
+    sed -i "s/echo/#echo/" src/egrep.sh
+    ./configure --prefix=/usr
     make
 }
 
-install() {
+package() {
     make DESTDIR=$LX_ROOTFS install
 }
-
-"$LX_STAGE"

@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/grub.html
+
+[package]
+name = "grub"
+version = "2.14"
+
+[sources]
+
+[sources.grub]
+url = "https://ftpmirror.gnu.org/grub/grub-2.14.tar.xz"

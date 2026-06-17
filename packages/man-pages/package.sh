@@ -4,8 +4,6 @@ build() {
     rm -v man3/crypt*
 }
 
-install() {
+package() {
     make -R GIT=false prefix=/usr install
 }
-
-"$LX_STAGE"

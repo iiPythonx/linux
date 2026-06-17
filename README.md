@@ -36,3 +36,15 @@ dejagnu
 ## Inspiration
 
 Based on [LFS 12.4 Stable](https://www.linuxfromscratch.org/lfs/view/stable), with some packages taken from [LFS 13.0 Development](https://www.linuxfromscratch.org/lfs/view/development).
+
+## Deviations
+
+Compared to [LFS](https://www.linuxfromscratch.org), some changes have been made:
+- `gettext` is installed **before** installing `gcc`
+    - If it's not, errors related to `libselinux` in `msgfmt` will break the build
+- The `packaging` Python module is not installed
+- `groff` is not installed
+- `man-db` is not installed
+- `vim` is not installed, replaced by `nano`
+- `uv` is installed by default
+- (Soon) `grub` replaced with `systemd-boot` or a tool that can build UKIs

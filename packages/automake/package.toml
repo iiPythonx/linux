@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/automake.html
+
+[package]
+name = "automake"
+version = "5.8.3"
+
+[sources]
+
+[sources.automake]
+url = "https://ftpmirror.gnu.org/automake/automake-1.18.1.tar.xz"

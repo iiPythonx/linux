@@ -1,26 +1,24 @@
 #!/usr/bin/env bash
 
 build() {
-    ./configure --prefix=/usr                \
-                --host=$LX_TARGET            \
-                --build=$(./config.guess)    \
-                --mandir=/usr/share/man      \
-                --with-manpage-format=normal \
-                --with-shared                \
-                --without-normal             \
-                --with-cxx-shared            \
-                --without-debug              \
-                --without-ada                \
-                --disable-stripping          \
-                AWK=gawk
+    ./configure --prefix=/usr           \
+                --mandir=/usr/share/man \
+                --with-shared           \
+                --without-debug         \
+                --without-normal        \
+                --with-cxx-shared       \
+                --enable-pc-files       \
+                --with-pkg-config-libdir=/usr/lib/pkgconfig
     make
 }
 
-install() {
-    make DESTDIR=$LX_ROOTFS install
-    ln -sv libncursesw.so $LX_ROOTFS/usr/lib/libncurses.so
-    sed -e 's/^#if.*XOPEN.*$/#if 1/' \
-        -i $LX_ROOTFS/usr/include/curses.h
+package() {
+    make DESTDIR=$PWD/dest install
+    sed -e 's/^#if.*XOPEN.*$/#if 1/' -i dest/usr/include/curses.h
+    cp --remove-destination -av dest/* /
+    for lib in ncurses form panel menu ; do
+        ln -sfv lib${lib}w.so /usr/lib/lib${lib}.so
+        ln -sfv ${lib}w.pc    /usr/lib/pkgconfig/${lib}.pc
+    done
+    ln -sfv libncursesw.so /usr/lib/libcurses.so
 }
-
-"$LX_STAGE"

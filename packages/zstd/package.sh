@@ -4,9 +4,7 @@ build() {
     make prefix=/usr
 }
 
-install() {
+package() {
     make prefix=/usr install
     rm -v /usr/lib/libzstd.a
 }
-
-"$LX_STAGE"

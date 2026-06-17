@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/sed.html
+
 [package]
 name = "sed"
 version = "4.10"
 
 [sources]
-sed = { url = "https://ftp.gnu.org/gnu/sed/sed-4.10.tar.xz" }
+
+[sources.sed]
+url = "https://ftp.gnu.org/gnu/sed/sed-4.10.tar.xz"

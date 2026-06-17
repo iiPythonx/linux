@@ -1,0 +1,13 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/udev.html
+
+[package]
+name = "udev"
+version = "260.2"
+
+[sources]
+
+[sources.udev]
+url = "https://github.com/systemd/systemd/archive/v260.2/systemd-260.2.tar.gz"
+
+[sources.udev-lfs]
+url = "https://anduin.linuxfromscratch.org/LFS/udev-lfs-20230818.tar.xz"

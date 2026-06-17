@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/psmisc.html
+
+[package]
+name = "psmisc"
+version = "23.7"
+
+[sources]
+
+[sources.psmisc]
+url = "https://sourceforge.net/projects/psmisc/files/psmisc/psmisc-23.7.tar.xz"

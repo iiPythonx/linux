@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/autoconf.html
+
+[package]
+name = "autoconf"
+version = "2.73"
+
+[sources]
+
+[sources.autoconf]
+url = "https://ftpmirror.gnu.org/autoconf/autoconf-2.73.tar.xz"

@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/diffutils.html
+
 [package]
 name = "diffutils"
 version = "3.12"
 
 [sources]
-diffutils = { url = "https://ftp.gnu.org/gnu/diffutils/diffutils-3.12.tar.xz" }
+
+[sources.diffutils]
+url = "https://ftpmirror.gnu.org/diffutils/diffutils-3.12.tar.xz"

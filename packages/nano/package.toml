@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/blfs/view/svn/postlfs/nano.html
+
+[package]
+name = "nano"
+version = "9.0"
+
+[sources]
+
+[sources.nano]
+url = "https://www.nano-editor.org/dist/v9/nano-9.0.tar.xz"

@@ -26,7 +26,6 @@ class Package:
     name:     str
     version:  str
     sources:  list[Source]
-    fakeroot: bool
 
 def cexit(message: str) -> None:
     print(message)
@@ -36,7 +35,6 @@ class LX:
     def __init__(self, args: Namespace) -> None:
         self.temp_dir: Path = args.temp_dir
         self.root_dir: Path = args.root_dir
-        self.prefix: Path = args.prefix
         self.extract_dir: Path = args.temp_dir / "extract"
         self.sources_dir: Path = args.sources_dir
         self.config_dir: Path = args.config_dir
@@ -48,7 +46,6 @@ class LX:
         self.environment = os.environ | {
             "LX_TARGET": "x86_64-iipython-linux-gnu",
             "LX_ROOTFS": str(self.root_dir),
-            "LX_PREFIX": str(self.prefix),
             "MAKEFLAGS": f"-j{os.cpu_count()}"
         }
 
@@ -84,13 +81,6 @@ class LX:
             if package.strip()
         ]
 
-    @staticmethod
-    def scan_fakeroot(root: Path) -> list[str]:
-        return sorted([
-            "/" + str(item.relative_to(root))
-            for item in root.rglob("*") if not item.is_dir()
-        ])
-
     def read_package(self, package: str) -> Package:
         package_path = self.sources_dir / package
         if not package_path.is_dir():
@@ -101,8 +91,10 @@ class LX:
             path = package_path,
             name = metadata["package"]["name"],
             version = metadata["package"]["version"],
-            sources = [Source(name = name, **data) for name, data in metadata.get("sources", {}).items()],
-            fakeroot = metadata.get("build", {}).get("fakeroot", True)
+            sources = [
+                Source(name = name, **data)
+                for name, data in metadata.get("sources", {}).items()
+            ]
         )
 
     # Package state
@@ -157,8 +149,9 @@ class LX:
                 rmtree(extracted_path)
 
             extracted_path.mkdir()
-            if filename.endswith(".tar.xz") or filename.endswith(".tar.gz") or filename.endswith(".tar.bz2"):
-                subprocess.run(["tar", "-xf", source_file, f"--strip-components={source.strip}", "-C", self.extract_dir / source.name])
+            for archive_extension in [".tar.xz", ".tar.gz", ".tar.bz2", ".tgz", ".txz"]:
+                if filename.endswith(archive_extension):
+                    subprocess.run(["tar", "-xf", source_file, f"--strip-components={source.strip}", "-C", self.extract_dir / source.name])
 
             else:
 
@@ -168,49 +161,26 @@ class LX:
         if self.fetch:
             return
 
-        # Fakeroot
-        fakeroot = self.temp_dir / "fakeroot"
-        if package.fakeroot:
-            if fakeroot.is_dir():
-                rmtree(fakeroot)
-
-            fakeroot.mkdir()
-
-        else:
-            fakeroot = self.root_dir
-
         # Handle stages
         def run_stage(stage: str) -> None:
             active_path = self.extract_dir / package.name
             if not active_path.is_dir():
-                active_path = fakeroot  # No sources were extracted, metapackage or smth similar
+                active_path = self.root_dir  # No sources were extracted, metapackage or smth similar
 
             subprocess.run(
-                ["bash", package.path / "package.sh"],
-                env = self.environment | {"LX_STAGE": stage, "LX_ROOTFS": str(fakeroot)},
+                ["bash", "-c", f". {package.path / 'package.sh'} && {stage}"],
+                env = self.environment,
                 cwd = active_path,
                 check = True
             )
 
-        for stage in ("build", "install"):
+        for stage in ("build", "package"):
             run_stage(stage)
 
-        # Relocate
-        if package.fakeroot:
-            subprocess.run([
-                "rsync",
-                "-a",
-                f"{fakeroot}/",
-                f"{self.root_dir}/"
-            ], check = True)
-
         # Register package
-        self.add_package(package, self.scan_fakeroot(fakeroot) if package.fakeroot else [])
+        self.add_package(package, [])
 
         # Cleanup
-        if fakeroot.is_dir() and package.fakeroot:
-            rmtree(fakeroot)
-
         for source in package.sources:
             extracted_path = self.extract_dir / source.name
             if extracted_path.is_dir():
@@ -219,7 +189,6 @@ class LX:
 if __name__ == "__main__":
     p = ArgumentParser("lx")
     p.add_argument("--root-dir", type = Path, help = "targeted root filesystem", default = "/")
-    p.add_argument("--prefix", type = Path, help = "installation prefix for configure stage", default = "/")
     p.add_argument("--temp-dir", type = Path, help = "extraction directory for package sources", default = "/tmp/lx")
     p.add_argument("--config-dir", type = Path, help = "path to lx configuration data", default = "/var/lx")
     p.add_argument("--sources-dir", type = Path, help = "directory to use as a source cache", default = "/var/cache/lx/sources")

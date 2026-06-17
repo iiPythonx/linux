@@ -5,9 +5,7 @@ build() {
     make && make check
 }
 
-install() {
+package() {
     make DESTDIR=$LX_ROOTFS install
     rm -fv /usr/lib/libz.a
 }
-
-"$LX_STAGE"

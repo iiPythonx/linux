@@ -14,8 +14,6 @@ build() {
     make
 }
 
-install() {
-    make install
+package() {
+    make DESTDIR=$LX_ROOTFS install
 }
-
-"$LX_STAGE"

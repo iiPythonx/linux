@@ -10,11 +10,9 @@ build() {
 
 # WARNING: infinite death spiral present here
 # As of 06/16/26, I still have NO idea why it loops, ik lx isn't doing it
-install() {
+package() {
     cd build
-    make install
+    make DESTDIR=$LX_ROOTFS install
     install -v -dm755  /usr/share/doc/dejagnu-1.6.3
     install -v -m644   doc/dejagnu.{html,txt} /usr/share/doc/dejagnu-1.6.3
 }
-
-"$LX_STAGE"

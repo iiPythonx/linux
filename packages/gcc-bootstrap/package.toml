@@ -4,9 +4,6 @@
 name = "gcc-bootstrap"
 version = "16.1.0"
 
-[build]
-fakeroot = false
-
 [sources]
 
 [sources.gcc-bootstrap]

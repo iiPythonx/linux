@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/less  .html
+
+[package]
+name = "less"
+version = "704"
+
+[sources]
+
+[sources.less]
+url = "https://www.greenwoodsoftware.com/less/less-704.tar.gz"

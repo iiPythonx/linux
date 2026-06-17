@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/procps-ng.html
+
+[package]
+name = "procps-ng"
+version = "4.0.6"
+
+[sources]
+
+[sources.procps-ng]
+url = "https://sourceforge.net/projects/procps-ng/files/Production/procps-ng-4.0.6.tar.xz"

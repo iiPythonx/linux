@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/gperf.html
+
+[package]
+name = "gperf"
+version = "3.3"
+
+[sources]
+
+[sources.gperf]
+url = "https://ftpmirror.gnu.org/gperf/gperf-3.3.tar.gz"

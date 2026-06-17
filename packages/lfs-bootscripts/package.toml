@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/bootscripts.html
+
+[package]
+name = "lfs-bootscripts"
+version = "20250827"
+
+[sources]
+
+[sources.lfs-bootscripts]
+url = "https://www.linuxfromscratch.org/lfs/downloads/development/lfs-bootscripts-20250827.tar.xz"

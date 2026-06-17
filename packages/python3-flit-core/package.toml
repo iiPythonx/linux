@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/flit-core.html
+
+[package]
+name = "python3-flit-core"
+version = "3.12.0"
+
+[sources]
+
+[sources.python3-flit-core]
+url = "https://pypi.org/packages/source/f/flit-core/flit_core-3.12.0.tar.gz"

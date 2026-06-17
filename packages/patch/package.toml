@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/patch.html
+
 [package]
 name = "patch"
 version = "2.8"
 
 [sources]
-patch = { url = "https://ftp.gnu.org/gnu/patch/patch-2.8.tar.xz" }
+
+[sources.patch]
+url = "https://ftpmirror.gnu.org/patch/patch-2.8.tar.xz"

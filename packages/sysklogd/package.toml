@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/sysklogd.html
+
+[package]
+name = "sysklogd"
+version = "2.7.2"
+
+[sources]
+
+[sources.sysklogd]
+url = "https://github.com/troglobit/sysklogd/releases/download/v2.7.2/sysklogd-2.7.2.tar.gz"

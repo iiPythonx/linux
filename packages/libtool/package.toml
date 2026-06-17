@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/libtool.html
+
+[package]
+name = "libtool"
+version = "2.5.4"
+
+[sources]
+
+[sources.libtool]
+url = "https://ftpmirror.gnu.org/libtool/libtool-2.5.4.tar.xz"

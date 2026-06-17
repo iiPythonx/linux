@@ -28,14 +28,12 @@ build() {
     unset SRCDIR
 }
 
-install() {
+package() {
     cd unix
-    make install
+    make DESTDIR=$LX_ROOTFS install
     chmod 644 /usr/lib/libtclstub8.6.a
     chmod -v u+w /usr/lib/libtcl8.6.so
-    make install-private-headers
+    make DESTDIR=$LX_ROOTFS install-private-headers
     ln -sfv tclsh8.6 /usr/bin/tclsh
     mv -v /usr/share/man/man3/{Thread,Tcl_Thread}.3
 }
-
-"$LX_STAGE"

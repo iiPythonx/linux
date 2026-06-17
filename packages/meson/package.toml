@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/meson.html
+
+[package]
+name = "meson"
+version = "1.11.1"
+
+[sources]
+
+[sources.meson]
+url = "https://github.com/mesonbuild/meson/releases/download/1.11.1/meson-1.11.1.tar.gz"

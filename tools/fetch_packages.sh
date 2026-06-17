@@ -4,6 +4,7 @@
 set -euo pipefail
 
 ROOTFS="$(realpath rootfs)"
+ROOTFS=/mnt
 
 sudo python3 tools/lx.py \
     --root-dir "$ROOTFS" \

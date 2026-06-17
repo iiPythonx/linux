@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/perl.html
+
+[package]
+name = "perl"
+version = "5.42.2"
+
+[sources]
+
+[sources.perl]
+url = "https://www.cpan.org/src/5.0/perl-5.42.2.tar.xz"

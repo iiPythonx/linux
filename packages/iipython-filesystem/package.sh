@@ -4,7 +4,7 @@ build() {
     return 0
 }
 
-install() {
+package() {
     mkdir -pv "$LX_ROOTFS"/{etc,var}
     mkdir -pv "$LX_ROOTFS"/usr/{bin,lib,sbin}
 
@@ -14,5 +14,3 @@ install() {
 
     mkdir -pv "$LX_ROOTFS/lib64"
 }
-
-"$LX_STAGE"
