@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/attr.html
+
+[package]
+name = "attr"
+version = "2.5.2"
+
+[sources]
+
+[sources.attr]
+url = "https://download.savannah.gnu.org/releases/attr/attr-2.5.2.tar.gz"

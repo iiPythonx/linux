@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/gmp.html
+
+[package]
+name = "gmp"
+version = "6.3.0"
+
+[sources]
+
+[sources.gmp]
+url = "https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz"

@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/dejagnu.html
+
+[package]
+name = "dejagnu"
+version = "1.6.3"
+
+[sources]
+
+[sources.dejagnu]
+url = "https://ftpmirror.gnu.org/dejagnu/dejagnu-1.6.3.tar.gz"

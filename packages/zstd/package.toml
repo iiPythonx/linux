@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/zstd.html
+
+[package]
+name = "zstd"
+version = "1.5.7"
+
+[sources]
+
+[sources.zstd]
+url = "https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz"

@@ -1,0 +1,6 @@
+[package]
+name = "m4-bootstrap"
+version = "1.4.21"
+
+[sources]
+m4-bootstrap = { url = "https://ftp.gnu.org/gnu/m4/m4-1.4.21.tar.xz" }

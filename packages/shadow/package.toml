@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/shadow.html
+
+[package]
+name = "shadow"
+version = "4.19.4"
+
+[sources]
+
+[sources.shadow]
+url = "https://github.com/shadow-maint/shadow/releases/download/4.19.4/shadow-4.19.4.tar.xz"

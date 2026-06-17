@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/binutils.html
+
 [package]
 name = "binutils"
 version = "2.46.1"
 
 [sources]
-binutils = { url = "https://sourceware.org/pub/binutils/releases/binutils-2.46.1.tar.xz" }
+
+[sources.binutils]
+url = "https://sourceware.org/pub/binutils/releases/binutils-2.46.1.tar.xz"

@@ -1,6 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/file.html
+
 [package]
 name = "file"
 version = "5.48"
 
 [sources]
-file = { url = "https://astron.com/pub/file/file-5.48.tar.gz" }
+
+[sources.file]
+url = "https://astron.com/pub/file/file-5.48.tar.gz"

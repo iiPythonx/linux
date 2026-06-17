@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/mpfr.html
+
+[package]
+name = "mpfr"
+version = "4.2.2"
+
+[sources]
+
+[sources.mpfr]
+url = "https://ftpmirror.gnu.org/mpfr/mpfr-4.2.2.tar.xz"

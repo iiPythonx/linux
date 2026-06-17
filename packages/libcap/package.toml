@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/libcap.html
+
+[package]
+name = "libcap"
+version = "2.78"
+
+[sources]
+
+[sources.libcap]
+url = "https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.78.tar.xz"

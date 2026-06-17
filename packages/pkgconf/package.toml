@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/pkgconf.html
+
+[package]
+name = "pkgconf"
+version = "2.5.1"
+
+[sources]
+
+[sources.pkgconf]
+url = "https://distfiles.ariadne.space/pkgconf/pkgconf-2.5.1.tar.xz"

@@ -21,3 +21,18 @@
 # Install all the core packages in the chroot
 ./tools/enter_chroot lx @core
 ```
+
+## Problems
+
+Some packages have issues installing due to their install script infinitely looping.  
+I have no idea what causes this as `lx` isn't the one doing it, and nothing re-calls the  
+bash scripts.
+
+The current list of affected packages is as follows:
+```
+dejagnu
+```
+
+## Inspiration
+
+Based on [LFS 12.4 Stable](https://www.linuxfromscratch.org/lfs/view/stable), with some packages taken from [LFS 13.0 Development](https://www.linuxfromscratch.org/lfs/view/development).

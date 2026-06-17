@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/libxcrypt.html
+
+[package]
+name = "libxcrypt"
+version = "4.5.2"
+
+[sources]
+
+[sources.libxcrypt]
+url = "https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-4.5.2.tar.xz"

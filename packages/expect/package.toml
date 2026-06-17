@@ -1,0 +1,13 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/expect.html
+
+[package]
+name = "expect"
+version = "5.45.4"
+
+[sources]
+
+[sources.expect]
+url = "https://prdownloads.sourceforge.net/expect/expect5.45.4.tar.gz"
+
+[sources.expect-patch]
+url = "https://www.linuxfromscratch.org/patches/lfs/development/expect-5.45.4-gcc15-1.patch"

@@ -1,10 +1,10 @@
 iipython-filesystem
-m4
+m4-bootstrap
 ncurses
 bash
 coreutils
 diffutils
-file
+file-bootstrap
 findutils
 gawk
 grep
@@ -13,6 +13,6 @@ make
 patch
 sed
 tar
-xz
+xz-bootstrap
 binutils
-gcc
+gcc-bootstrap

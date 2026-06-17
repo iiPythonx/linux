@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/lfs/view/development/chapter08/tcl.html
+
+[package]
+name = "tcl"
+version = "8.6.18"
+
+[sources]
+
+[sources.tcl]
+url = "https://downloads.sourceforge.net/tcl/tcl8.6.18-src.tar.gz"

@@ -157,7 +157,7 @@ class LX:
                 rmtree(extracted_path)
 
             extracted_path.mkdir()
-            if filename.endswith(".tar.xz") or filename.endswith(".tar.gz"):
+            if filename.endswith(".tar.xz") or filename.endswith(".tar.gz") or filename.endswith(".tar.bz2"):
                 subprocess.run(["tar", "-xf", source_file, f"--strip-components={source.strip}", "-C", self.extract_dir / source.name])
 
             else:
