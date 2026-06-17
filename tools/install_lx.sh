@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-ROOTFS="$(realpath rootfs)"
+: "${ROOTFS:=$(realpath rootfs)}"
 
 sudo install -Dm755 tools/lx.py "$ROOTFS/usr/bin/lx"
 

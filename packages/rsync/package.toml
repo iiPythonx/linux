@@ -1,6 +1,0 @@
-[package]
-name = "rsync"
-version = "3.4.4"
-
-[sources]
-rsync = { url = "https://download.samba.org/pub/rsync/src/rsync-3.4.4.tar.gz" }

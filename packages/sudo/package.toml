@@ -1,0 +1,10 @@
+# https://www.linuxfromscratch.org/blfs/view/stable-systemd/postlfs/sudo.html
+
+[package]
+name = "sudo"
+version = "1.9.18rc1"
+
+[sources]
+
+[sources.sudo]
+url = "https://www.sudo.ws/dist/beta/sudo-1.9.18rc1.tar.gz"

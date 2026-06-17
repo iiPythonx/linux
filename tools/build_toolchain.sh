@@ -5,7 +5,7 @@ set -e
 set -euo pipefail
 
 # environment
-ROOTFS="$(realpath rootfs)"
+: "${ROOTFS:=$(realpath rootfs)}"
 mkdir -p "$ROOTFS"
 
 if [ -z "${LX_ENV:-}" ]; then

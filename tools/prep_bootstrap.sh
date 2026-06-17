@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-ROOTFS="$(realpath rootfs)"
+: "${ROOTFS:=$(realpath rootfs)}"
 
 ln -sv /proc/self/mounts $ROOTFS/etc/mtab
 

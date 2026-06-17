@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copyright (c) 2026 iiPython
 
-ROOTFS="$(realpath rootfs)"
+: "${ROOTFS:=$(realpath rootfs)}"
 
 sudo umount -R "$ROOTFS"/run
 sudo umount -R "$ROOTFS"/sys

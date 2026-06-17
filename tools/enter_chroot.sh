@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-ROOTFS="$(realpath rootfs)"
+: "${ROOTFS:=$(realpath rootfs)}"
 
 sudo chroot "$ROOTFS" /usr/bin/env -i \
     HOME=/root \

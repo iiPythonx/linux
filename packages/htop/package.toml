@@ -1,0 +1,10 @@
+# https://github.com/htop-dev/htop
+
+[package]
+name = "htop"
+version = "3.5.1"
+
+[sources]
+
+[sources.htop]
+url = "https://github.com/htop-dev/htop/releases/download/3.5.1/htop-3.5.1.tar.xz"
