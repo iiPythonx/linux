@@ -11,6 +11,8 @@ from dataclasses import dataclass
 from argparse import ArgumentParser, Namespace
 from urllib.request import urlretrieve
 
+__version__ = "1.0.1"
+
 @dataclass
 class Source:
     name:  str
@@ -72,7 +74,7 @@ class LX:
 
     # Utilities
     def resolve_group(self, group: str) -> list[str]:
-        group_file = self.sources_dir / f"{group}.list"
+        group_file = self.sources_dir / "lists" / f"{group}.list"
         if not group_file.is_file():
             cexit(f"Group not found: {group}")
 
@@ -82,7 +84,7 @@ class LX:
         ]
 
     def read_package(self, package: str) -> Package:
-        package_path = self.sources_dir / package
+        package_path = self.sources_dir / "packages" / package
         if not package_path.is_dir():
             cexit(f"Package not found: {package}")
 

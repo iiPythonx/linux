@@ -10,4 +10,4 @@ sudo install -Dm755 tools/lx.py "$ROOTFS/usr/bin/lx"
 sudo mkdir -p "$ROOTFS/var/cache/lx"
 
 sudo rm -rf "$ROOTFS/var/cache/lx/sources"
-sudo cp -rv packages "$ROOTFS/var/cache/lx/sources"
+sudo cp -rv repo "$ROOTFS/var/cache/lx/sources"

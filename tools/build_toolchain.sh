@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Copyright (c) 2026 iiPython
 
-set -e
 set -euo pipefail
 
 # environment
