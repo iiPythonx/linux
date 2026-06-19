@@ -14,6 +14,6 @@ env -i \
     python3 tools/lx.py \
         --root-dir "$ROOTFS" \
         --temp-dir "$PWD/temp" \
-        --sources-dir "$PWD/packages" \
+        --sources-dir "$PWD/repo" \
         --config-dir "$ROOTFS/var/lx" \
         $1
