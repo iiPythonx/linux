@@ -1,6 +1,0 @@
-[package]
-name = "xz-bootstrap"
-version = "5.8.3"
-
-[sources]
-xz-bootstrap = { url = "https://github.com/tukaani-project/xz/releases/download/v5.8.3/xz-5.8.3.tar.xz" }

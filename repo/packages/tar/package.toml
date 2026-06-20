@@ -3,6 +3,7 @@
 [package]
 name = "tar"
 version = "1.35"
+extras = [ "bootstrap" ]
 
 [sources]
 

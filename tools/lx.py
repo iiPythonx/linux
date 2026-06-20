@@ -2,6 +2,7 @@
 # Copyright (c) 2026 iiPython
 
 import os
+import re
 import json
 import tomllib
 import subprocess
@@ -11,16 +12,28 @@ from dataclasses import dataclass
 from argparse import ArgumentParser, Namespace
 from urllib.request import urlretrieve
 
-__version__ = "1.0.1"
+__version__ = "2.0.0"
+
+ARCHIVE_FORMATS = {
+    ".tar.xz",
+    ".tar.gz",
+    ".tar.bz2",
+    ".tgz",
+    ".txz"
+}
+
+PACKAGE_NAME_REGEX = re.compile(r"([\w-]+)(?:\[([\w-]+)\])?")
 
 @dataclass
 class Source:
-    name:  str
-    url:   str
-    strip: int
+    name:   str
+    url:    str
+    main:   bool
+    strip:  int
+    extras: list[str]
 
-    def __init__(self, name: str, url: str, strip: int = 1) -> None:
-        self.name, self.url, self.strip = name, url, strip
+    def __init__(self, name: str, url: str, main: bool = False, strip: int = 1, extras: list[str] = []) -> None:
+        self.name, self.url, self.main, self.strip, self.extras = name, url, main, strip, extras
 
 @dataclass
 class Package:
@@ -28,55 +41,59 @@ class Package:
     name:     str
     version:  str
     sources:  list[Source]
+    extra:    str | None
 
-def cexit(message: str) -> None:
-    print(message)
-    exit()
+class PackageException(Exception):
+    pass
 
 class LX:
     def __init__(self, args: Namespace) -> None:
-        self.temp_dir: Path = args.temp_dir
-        self.root_dir: Path = args.root_dir
-        self.extract_dir: Path = args.temp_dir / "extract"
-        self.sources_dir: Path = args.sources_dir
-        self.config_dir: Path = args.config_dir
+        self.root_path: Path = args.root_path
+        self.lx_path: Path = args.data_path
 
-        # Handle fetch mode
+        # Configuration options
         self.fetch: bool = args.fetch
+        self.disable_chroot: bool = args.disable_chroot
 
         # Environment
         self.environment = os.environ | {
             "LX_TARGET": "x86_64-iipython-linux-gnu",
-            "LX_ROOTFS": str(self.root_dir),
+            "LX_ROOTFS": str(self.root_path),
+            "LX_VERSION": __version__,
             "MAKEFLAGS": f"-j{os.cpu_count()}"
         }
 
         # Folder creation
-        self.config_dir.mkdir(exist_ok = True, parents = True)
-        self.extract_dir.mkdir(exist_ok = True, parents = True)
+        self.lx_path.mkdir(exist_ok = True, parents = True)
 
         # Grab state file
-        self.state_file = self.config_dir / "package_state.json"
+        self.state_file = self.lx_path / "package_state.json"
         if not self.state_file.is_file():
             self.state_file.write_text("{}")
 
         # Handle packages
-        package_list = []
-        for package in args.packages:
-            if package[0] == "@":
-                package_list += self.resolve_group(package[1:])
+        if not (args.install or args.remove):
+            raise PackageException("lx: nothing to do")
 
-            else:
-                package_list.append(package)
-
-        for package in package_list:
-            self.install(package)
+        for package in self.resolve_packages(args.packages):
+            (self.install if args.install else self.remove)(package)
 
     # Utilities
+    def resolve_packages(self, packages: list[str]) -> list[Package]:
+        package_list = []
+        for package in packages:
+            if package[0] == "@":
+                package_list += self.resolve_group(package[1:])
+                continue
+            
+            package_list.append(package)
+
+        return [self.read_package(package) for package in package_list]
+
     def resolve_group(self, group: str) -> list[str]:
-        group_file = self.sources_dir / "lists" / f"{group}.list"
+        group_file = self.lx_path / f"repo/lists/{group}.list"
         if not group_file.is_file():
-            cexit(f"Group not found: {group}")
+            raise PackageException(f"lx: group not found: {group}")
 
         return [
             package for package in group_file.read_text().splitlines()
@@ -84,11 +101,19 @@ class LX:
         ]
 
     def read_package(self, package: str) -> Package:
-        package_path = self.sources_dir / "packages" / package
+        name_data = PACKAGE_NAME_REGEX.match(package)
+        if name_data is None:
+            raise PackageException(f"lx: invalid package name: {package}")
+        
+        package_name, package_extra = name_data.groups()
+        package_path = self.lx_path / f"repo/packages/{package_name}"
         if not package_path.is_dir():
-            cexit(f"Package not found: {package}")
+            raise PackageException(f"lx: package not found: {package_name}")
 
         metadata = tomllib.loads((package_path / "package.toml").read_text())
+        if package_extra and package_extra not in metadata["package"].get("extras", []):
+            raise PackageException(f"lx: invalid extra for {package_name}: {package_extra}")
+
         return Package(
             path = package_path,
             name = metadata["package"]["name"],
@@ -96,7 +121,8 @@ class LX:
             sources = [
                 Source(name = name, **data)
                 for name, data in metadata.get("sources", {}).items()
-            ]
+            ],
+            extra = package_extra
         )
 
     # Package state
@@ -123,55 +149,77 @@ class LX:
         return True
 
     # Operations
-    def install(self, package: str | Package) -> None:
-        if not isinstance(package, Package):
-            package = self.read_package(package)
+    def setup_overlay(self, package: Package) -> None:
+        pkgbuild_path = Path(f"/tmp/lx/{package.name}")
+        for path in {"upper", "work", "merged"}:
+            (pkgbuild_path / path).mkdir(parents = True)
 
+        subprocess.run([
+            "mount",
+            "-t", "overlay", "overlay",
+            "-o", f"lowerdir={self.root_path},upperdir={pkgbuild_path / 'upper'},workdir={pkgbuild_path / 'work'}",
+            pkgbuild_path / "merged"
+        ])
+
+        for mount in {"dev", "proc", "sys"}:
+            subprocess.run(["mount", "--bind", f"/{mount}", pkgbuild_path / f"merged/{mount}"])
+
+    def install(self, package: Package) -> None:
         packages = self.read_packages()
         if not self.conflict_check(packages, package):
             return
 
+        cache_path = self.lx_path / f"cache/{package.name}"
+        cache_path.mkdir(parents = True, exist_ok = True)
+
         # Download sources
         for source in package.sources:
-            filename = source.url.split("/")[-1]
-            source_file = self.temp_dir / filename
+            if source.extras and package.extra not in source.extras:
+                continue
 
+            filename = source.url.split("/")[-1].split("?")[0]
+
+            # Retrieve file
+            source_file = cache_path / filename
             if not source_file.is_file():
                 print(f"Fetching source '{source.name}' for package '{package.name}'")
                 urlretrieve(source.url, source_file)
 
-            else:
-                print(f"Reusing source '{source.name}' for package '{package.name}'")
-
             if self.fetch:
                 continue
 
-            extracted_path = self.extract_dir / source.name
+            extracted_path = cache_path / source.name
             if extracted_path.is_dir():
                 rmtree(extracted_path)
 
             extracted_path.mkdir()
-            for archive_extension in [".tar.xz", ".tar.gz", ".tar.bz2", ".tgz", ".txz"]:
+            for archive_extension in ARCHIVE_FORMATS:
                 if filename.endswith(archive_extension):
-                    subprocess.run(["tar", "-xf", source_file, f"--strip-components={source.strip}", "-C", self.extract_dir / source.name])
-
-            else:
-
-                # Copy file as-is
-                source_file.rename(extracted_path / source_file.name)
+                    subprocess.run(["tar", "-xf", source_file, f"--strip-components={source.strip}", "-C", extracted_path])
 
         if self.fetch:
             return
 
+        # Figure out active path
+        active_path = None
+        if len(package.sources) == 1:
+            active_path = cache_path / package.sources[0].name
+
+        else:
+            for source in package.sources:
+                if active_path != self.root_path:
+                    raise PackageException(f"lx: {package.name}: multiple sources marked as main!")
+
+                if source.main:
+                    active_path = cache_path / source.name
+
+        active_path = active_path or self.root_path
+
         # Handle stages
         def run_stage(stage: str) -> None:
-            active_path = self.extract_dir / package.name
-            if not active_path.is_dir():
-                active_path = self.root_dir  # No sources were extracted, metapackage or smth similar
-
             subprocess.run(
                 ["bash", "-c", f". {package.path / 'package.sh'} && {stage}"],
-                env = self.environment,
+                env = self.environment | ({f"LX_EXTRA_{package.extra.upper()}": "1"} if package.extra else {}),
                 cwd = active_path,
                 check = True
             )
@@ -184,17 +232,21 @@ class LX:
 
         # Cleanup
         for source in package.sources:
-            extracted_path = self.extract_dir / source.name
+            extracted_path = cache_path / source.name
             if extracted_path.is_dir():
                 rmtree(extracted_path)
 
+    def remove(self, package: Package) -> None:
+        print("Remove:", package)
+
 if __name__ == "__main__":
     p = ArgumentParser("lx")
-    p.add_argument("--root-dir", type = Path, help = "targeted root filesystem", default = "/")
-    p.add_argument("--temp-dir", type = Path, help = "extraction directory for package sources", default = "/tmp/lx")
-    p.add_argument("--config-dir", type = Path, help = "path to lx configuration data", default = "/var/lx")
-    p.add_argument("--sources-dir", type = Path, help = "directory to use as a source cache", default = "/var/cache/lx/sources")
+    p.add_argument("--root-path", type = Path, help = "targeted root filesystem", default = "/")
+    p.add_argument("--data-path", type = Path, help = "path to lx data", default = "/var/lx")
+    p.add_argument("--disable-chroot", action = "store_true", help = "disable package chroot, not recommended unless bootstrapping", default = False)
     p.add_argument("--fetch", action = "store_true", help = "only fetch sources, don't install anything", default = False)
+    p.add_argument("-i", "--install", action = "store_true", help = "install a package", default = False)
+    p.add_argument("-r", "--remove", action = "store_true", help = "remove a package", default = False)
     p.add_argument("packages", nargs = "+")
 
     LX(p.parse_args())

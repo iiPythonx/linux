@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
 build() {
-    ./configure --prefix=/usr
+    if [[ ! -z "${LX_EXTRA_BOOTSTRAP}" ]]; then
+        ./configure --prefix=/usr \
+            --host=$LX_TARGET     \
+            --build=$(build-aux/config.guess)
+    else
+        ./configure --prefix=/usr
+    fi
+
     make
 }
 

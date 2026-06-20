@@ -1,6 +1,0 @@
-[package]
-name = "diffutils-bootstrap"
-version = "3.12"
-
-[sources]
-diffutils-bootstrap = { url = "https://ftp.gnu.org/gnu/diffutils/diffutils-3.12.tar.xz" }

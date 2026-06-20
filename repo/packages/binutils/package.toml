@@ -3,6 +3,7 @@
 [package]
 name = "binutils"
 version = "2.46.1"
+extras = [ "bootstrap" ]
 
 [sources]
 

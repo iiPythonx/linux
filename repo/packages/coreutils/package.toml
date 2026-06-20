@@ -3,6 +3,7 @@
 [package]
 name = "coreutils"
 version = "9.11"
+extras = [ "bootstrap" ]
 
 [sources]
 

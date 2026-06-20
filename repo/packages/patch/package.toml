@@ -3,6 +3,7 @@
 [package]
 name = "patch"
 version = "2.8"
+extras = [ "bootstrap" ]
 
 [sources]
 

@@ -3,6 +3,7 @@
 [package]
 name = "gawk"
 version = "5.4.0"
+extras = [ "bootstrap" ]
 
 [sources]
 

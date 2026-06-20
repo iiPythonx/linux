@@ -3,6 +3,7 @@
 [package]
 name = "file"
 version = "5.48"
+extras = [ "bootstrap" ]
 
 [sources]
 

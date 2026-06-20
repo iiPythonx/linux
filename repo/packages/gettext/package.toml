@@ -3,6 +3,7 @@
 [package]
 name = "gettext"
 version = "1.0"
+extras = [ "bootstrap" ]
 
 [sources]
 

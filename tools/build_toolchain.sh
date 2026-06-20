@@ -24,10 +24,8 @@ set +h
 
 # structure
 python3 tools/lx.py \
-    --root-dir "$ROOTFS" \
-    --temp-dir "$PWD/temp" \
-    --sources-dir "$PWD/packages" \
-    --config-dir "$ROOTFS/var/lx" \
+    --root-path "$ROOTFS" \
+    --data-path "$ROOTFS/var/lx" \
     iipython-filesystem
 
 # init

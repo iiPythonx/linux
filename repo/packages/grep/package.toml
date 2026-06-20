@@ -3,6 +3,7 @@
 [package]
 name = "grep"
 version = "3.12"
+extras = [ "bootstrap" ]
 
 [sources]
 

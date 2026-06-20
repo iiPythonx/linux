@@ -3,6 +3,7 @@
 [package]
 name = "sed"
 version = "4.10"
+extras = [ "bootstrap" ]
 
 [sources]
 

@@ -3,6 +3,7 @@
 [package]
 name = "m4"
 version = "1.4.21"
+extras = [ "bootstrap" ]
 
 [sources]
 

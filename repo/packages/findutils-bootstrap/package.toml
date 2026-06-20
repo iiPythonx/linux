@@ -1,6 +1,0 @@
-[package]
-name = "findutils-bootstrap"
-version = "4.10.0"
-
-[sources]
-findutils-bootstrap = { url = "https://ftp.gnu.org/gnu/findutils/findutils-4.10.0.tar.xz" }

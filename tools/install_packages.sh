@@ -12,8 +12,6 @@ env -i \
     CONFIG_SITE="$ROOTFS/usr/share/config.site" \
     MAKEFLAGS="-j$(nproc)" \
     python3 tools/lx.py \
-        --root-dir "$ROOTFS" \
-        --temp-dir "$PWD/temp" \
-        --sources-dir "$PWD/repo" \
-        --config-dir "$ROOTFS/var/lx" \
-        $1
+        --root-path "$ROOTFS" \
+        --data-path "$ROOTFS/var/lx" \
+        $@

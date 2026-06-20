@@ -3,6 +3,7 @@
 [package]
 name = "diffutils"
 version = "3.12"
+extras = [ "bootstrap" ]
 
 [sources]
 

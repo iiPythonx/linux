@@ -3,6 +3,7 @@
 [package]
 name = "perl"
 version = "5.42.2"
+extras = [ "bootstrap" ]
 
 [sources]
 

@@ -6,9 +6,11 @@
 ./tools/build_toolchain.sh
 
 # Install the most basic utilities
+ln -s $(realpath repo) rootfs/var/lx/repo
 ./tools/install_packages.sh @base
 
 # take a backup or something here
+sudo tar -cJpf iipython-linux.tar.xz rootfs
 
 # Download all the core packages (as the chroot won't have download suppport yet)
 ./tools/fetch_packages.sh @core

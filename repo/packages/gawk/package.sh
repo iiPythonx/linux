@@ -2,12 +2,23 @@
 
 build() {
     sed -i 's/extras//' Makefile.in
-    ./configure --prefix=/usr
+
+    if [[ -n "${LX_EXTRA_BOOTSTRAP}" ]]; then
+        ./configure --prefix=/usr     \
+                    --host=$LX_TARGET \
+                    --build=$(build-aux/config.guess)
+    else
+        ./configure --prefix=/usr
+    fi
+
     make
 }
 
 package() {
-    rm -f /usr/bin/gawk-5.4.0
-    make install
-    ln -sv gawk.1 /usr/share/man/man1/awk.1
+    if [[ -z "${LX_EXTRA_BOOTSTRAP}" ]]; then
+        rm -f /usr/bin/gawk-5.4.0
+        ln -sv gawk.1 /usr/share/man/man1/awk.1
+    fi
+
+    make DESTDIR="$LX_ROOTFS" install
 }

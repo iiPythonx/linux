@@ -3,6 +3,7 @@
 [package]
 name = "make"
 version = "4.4.1"
+extras = [ "bootstrap" ]
 
 [sources]
 

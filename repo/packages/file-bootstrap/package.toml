@@ -1,6 +1,0 @@
-[package]
-name = "file-bootstrap"
-version = "5.48"
-
-[sources]
-file-bootstrap = { url = "https://astron.com/pub/file/file-5.48.tar.gz" }

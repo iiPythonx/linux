@@ -1,6 +1,0 @@
-[package]
-name = "perl-bootstrap"
-version = "5.42.2"
-
-[sources]
-perl-bootstrap = { url = "https://www.cpan.org/src/5.0/perl-5.42.2.tar.gz" }

@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 
 build() {
-    ./configure --prefix=/usr
+    if [[ -n "${LX_EXTRA_BOOTSTRAP}" ]]; then
+        ./configure --prefix=/usr     \
+                    --host=$LX_TARGET \
+                    gl_cv_func_strcasecmp_works=y \
+                    --build=$(./build-aux/config.guess)
+    else
+        ./configure --prefix=/usr
+    fi
+
     make
 }
 
 package() {
-    make DESTDIR=$LX_ROOTFS install
+    make DESTDIR="$LX_ROOTFS" install
 }

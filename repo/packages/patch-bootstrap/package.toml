@@ -1,6 +1,0 @@
-[package]
-name = "patch-bootstrap"
-version = "2.8"
-
-[sources]
-patch-bootstrap = { url = "https://ftp.gnu.org/gnu/patch/patch-2.8.tar.xz" }

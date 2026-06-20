@@ -3,6 +3,7 @@
 [package]
 name = "findutils"
 version = "4.10.0"
+extras = [ "bootstrap" ]
 
 [sources]
 
